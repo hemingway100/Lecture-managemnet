@@ -1,5 +1,5 @@
 'use client';
-import { useState, useEffect, useMemo } from 'react';
+import { useState, useEffect, useMemo, Suspense } from 'react';
 import Link from 'next/link';
 import { useParams, useSearchParams } from 'next/navigation';
 import { Line, Doughnut } from 'react-chartjs-2';
@@ -9,6 +9,10 @@ import {
 } from 'chart.js';
 
 ChartJS.register(CategoryScale, LinearScale, PointElement, LineElement, ArcElement, Title, Tooltip, Legend, Filler);
+
+export default function StudentTestDetailWrapper() {
+  return <Suspense fallback={<div className="text-center py-5 text-muted">로딩 중...</div>}><StudentTestDetailInner /></Suspense>;
+}
 
 interface TestRecord { id: number; testName: string; date: string; score: number; totalScore: number; result: string | null }
 interface StudentInfo { name: string; school: string | null; grade: string | null }
@@ -29,7 +33,7 @@ const CATEGORIES = [
   { key: '작문', label: '작문', color: '#ec4899' },
 ];
 
-export default function StudentTestDetailPage() {
+function StudentTestDetailInner() {
   const params = useParams();
   const searchParams = useSearchParams();
   const studentId = parseInt(params?.id as string || '0');

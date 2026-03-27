@@ -1,5 +1,5 @@
 'use client';
-import { useState, useEffect, useMemo } from 'react';
+import { useState, useEffect, useMemo, Suspense } from 'react';
 import Link from 'next/link';
 import { useSearchParams } from 'next/navigation';
 import { Line, Bar, Doughnut } from 'react-chartjs-2';
@@ -9,6 +9,10 @@ import {
 } from 'chart.js';
 
 ChartJS.register(CategoryScale, LinearScale, PointElement, LineElement, BarElement, ArcElement, Title, Tooltip, Legend, Filler);
+
+export default function TestStudentsPageWrapper() {
+  return <Suspense fallback={<div className="text-center py-5 text-muted">로딩 중...</div>}><TestStudentsPageInner /></Suspense>;
+}
 
 interface Course { id: number; name: string; _count: { studentCourses: number } }
 interface StudentStat {
@@ -35,7 +39,7 @@ const CATEGORIES = [
   { key: '작문', label: '작문', color: '#ec4899' },
 ];
 
-export default function TestStudentsPage() {
+function TestStudentsPageInner() {
   const searchParams = useSearchParams();
   const initialCourseId = parseInt(searchParams?.get('courseId') || '0');
   const [courses, setCourses] = useState<Course[]>([]);
