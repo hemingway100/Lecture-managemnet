@@ -274,8 +274,15 @@ export default function AttendancePage() {
                           </td>
                           <td className="text-center">
                             {s.attendance?.messageSent
-                              ? <i className="bi bi-check-circle-fill text-success" style={{ fontSize: '0.85rem' }}></i>
-                              : <span className="text-muted">-</span>}
+                              ? <i className="bi bi-check-circle-fill text-success" title="발송완료" style={{ fontSize: '0.85rem' }}></i>
+                              : (
+                                <button className="btn btn-sm btn-outline-success py-0 px-1"
+                                  style={{ fontSize: '0.7rem' }}
+                                  title="이 학생에게 알림 발송"
+                                  onClick={() => { setSendTargets([s.studentId]); setShowSendModal(true); }}>
+                                  <i className="bi bi-send"></i>
+                                </button>
+                              )}
                           </td>
                         </tr>
                       );
@@ -290,7 +297,7 @@ export default function AttendancePage() {
                 {hasChanges && <span className="text-warning" style={{ fontSize: '0.78rem' }}><i className="bi bi-exclamation-circle me-1"></i>저장하지 않은 변경사항이 있습니다</span>}
               </div>
               <div className="d-flex gap-2">
-                {allMarked && !hasChanges && (
+                {stats.total > 0 && (
                   <button className="btn btn-outline-success" onClick={openSendModal}>
                     <i className="bi bi-send me-1"></i>출결 알림 발송
                   </button>
